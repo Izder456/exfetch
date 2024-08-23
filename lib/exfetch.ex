@@ -297,34 +297,46 @@ defmodule Exfetch.CLI do
 
     results = Enum.into(resources, %{}, fn {k, v} -> {k, v.()} end)
 
-    labels = ["USER", "OS", "SHELL", "VER", "CPU", "MEM"]
-    labels = if options.lowercase, do: Enum.map(labels, &String.downcase/1), else: labels
-
+    labels = if options.lowercase, do: ~w(user os shell ver cpu mem), else: ~w(USER OS SHELL VER CPU MEM)
     chosen_ascii = @ascii_art[options.ascii]
     max_label_width = Enum.map(labels, &String.length/1) |> Enum.max()
 
-    max_lines = max(length(chosen_ascii), 6)
+    output_lines = generate_output(chosen_ascii, labels, results, max_label_width, options)
 
-    Enum.map(0..(max_lines - 1), fn index ->
-      ascii_line = Enum.at(chosen_ascii, index, String.duplicate(" ", String.length(List.first(chosen_ascii))))
-      info_line = case index do
-                    1 -> format_line(labels, 0, max_label_width, options, "#{results["user"]}@#{results["host"]}")
-                    2 -> format_line(labels, 1, max_label_width, options, results["os"])
-                    3 -> format_line(labels, 2, max_label_width, options, results["shell"])
-                    4 -> format_line(labels, 3, max_label_width, options, results["release"])
-                    5 -> format_line(labels, 4, max_label_width, options, results["cpu"])
-                    6 -> format_line(labels, 5, max_label_width, options, "#{results["mem_usage"]} MiB / #{results["mem"]} MiB")
-                    _ -> ""
-                  end
-      "#{Enum.at(@colors, options.color)}#{ascii_line}#{@reset}#{info_line}"
-    end)
+    output_lines
     |> Enum.each(&IO.puts/1)
 
     IO.puts("")
   end
 
+  defp generate_output(ascii, labels, results, max_width, options) do
+    max_lines = max(length(ascii), 6)
+
+    Enum.map(0..(max_lines - 1), fn index ->
+      ascii_line = Enum.at(ascii, index, String.duplicate(" ", String.length(List.first(ascii))))
+      info_line = format_info_line(index, labels, results, max_width, options)
+      colorize(ascii_line, info_line, options.color)
+    end)
+  end
+
+  defp format_info_line(index, labels, results, max_width, options) do
+    case index do
+      1 -> format_line(labels, 0, max_width, options, "#{results["user"]}@#{results["host"]}")
+      2 -> format_line(labels, 1, max_width, options, results["os"])
+      3 -> format_line(labels, 2, max_width, options, results["shell"])
+      4 -> format_line(labels, 3, max_width, options, results["release"])
+      5 -> format_line(labels, 4, max_width, options, results["cpu"])
+      6 -> format_line(labels, 5, max_width, options, "#{results["mem_usage"]} MiB / #{results["mem"]} MiB")
+      _ -> ""
+    end
+  end
+
   defp format_line(labels, index, max_width, options, value) do
     label = Enum.at(labels, index)
     "#{@bold}#{Enum.at(@colors, options.color)}#{String.pad_trailing(label, max_width)}#{@reset}#{options.separator}#{value}"
+  end
+
+  defp colorize(ascii_line, info_line, color) do
+    "#{Enum.at(@colors, color)}#{ascii_line}#{@reset}#{info_line}"
   end
 end
