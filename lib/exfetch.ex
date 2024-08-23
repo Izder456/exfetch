@@ -182,9 +182,9 @@ defmodule Exfetch.OptionHandler do
     -l, --lowercase     Use lowercase labels
     -s, --separator     STRING Separator [default = " -> "]
     -c, --color         COLOR Pick a color output [default = 4]
-    (#{colors})
+                        (#{colors})
     -a, --ascii         ASCII Choose ASCII art [default = Tear]
-    (None, Tear, Linux, OpenBSD, NetBSD, FreeBSD, FreeBSDTrident, GhostBSD, GhostBSDGhost)
+                        (None, Tear, Linux, OpenBSD, NetBSD, FreeBSD, FreeBSDTrident, GhostBSD, GhostBSDGhost)
     -h, --help          Show help
     """
   end
