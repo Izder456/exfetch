@@ -1,7 +1,4 @@
 * Exfetch
-
-/a system fetching utility aiming to be 1:1 with crfetch, written in elixir/
-
 #+begin_html
 <center>
 <div style="max-width: fit-content; margin-inline: auto;">
@@ -19,6 +16,8 @@
 </center>
 #+end_html
 
+/a system fetching utility aiming to be an extension to crfetch, written in elixir/
+
 ** Supported Operating Systems
 
 - Linux
@@ -30,6 +29,12 @@
 ** Why replicate Cr(y)fetch?
 
 - *I needed an excuse to write elixir*
+
+- *I wanted a crfetch-like fetch, but with more features*
+
+** Why call it that?
+
+Well I didn't mean to call it that. It was an unintended side effect. I'll just pretend it was an /ex/-tension to crfetch. Woo...
 
 * Deps
 
