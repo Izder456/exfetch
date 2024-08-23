@@ -295,7 +295,12 @@ defmodule Exfetch.CLI do
       "mem" => &Resource.get_memory/0
     }
 
-    results = Enum.into(resources, %{}, fn {k, v} -> {k, v.()} end)
+    # Concurrently fetch results
+    results = 
+      resources
+      |> Enum.map(fn {key, func} -> Task.async(fn -> {key, func.()} end) end)
+      |> Enum.map(&Task.await/1)
+      |> Enum.into(%{})
 
     labels = if options.lowercase, do: ~w(user os shell ver cpu mem), else: ~w(USER OS SHELL VER CPU MEM)
     chosen_ascii = @ascii_art[options.ascii]
