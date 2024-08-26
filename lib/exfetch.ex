@@ -179,13 +179,13 @@ defmodule Exfetch.OptionHandler do
     """
     Usage: exfetch [options]
 
-    -l, --lowercase     Use lowercase labels
-    -s, --separator     STRING Separator [default = " -> "]
-    -c, --color         COLOR Pick a color output [default = 4]
-                        (#{colors})
-    -a, --ascii         ASCII Choose ASCII art [default = Tear]
-                        (None, Tear, Linux, OpenBSD, NetBSD, FreeBSD, FreeBSDTrident, GhostBSD, GhostBSDGhost)
-    -h, --help          Show help
+    -l, --lowercase         Use lowercase labels
+    -s, --separator STRING  Separator [default = " -> "]
+    -c, --color COLOR       Pick a color output [default = 4]
+                            (#{colors})
+    -a, --ascii ASCII       Choose ASCII art [default = Tear]
+                            (None, Tear, Linux, OpenBSD, NetBSD, FreeBSD, FreeBSDTrident, GhostBSD, GhostBSDGhost)
+    -h, --help              Show help
     """
   end
 end

@@ -8,6 +8,13 @@
 <a href="https://github.com/Izder456/exfetch/stargazers">
 <img alt="Stargazers" src="https://badgen.net/github/stars/izder456/exfetch">
 </a>
+<br>
+<a href="https://github.com/Izder456/exfetch/actions/workflows/ci-freebsd.yml">
+<img src="https://github.com/Izder456/exfetch/actions/workflows/ci-freebsd.yml/badge.svg" alt="FreeBSD CI">
+</a>
+<a href="https://github.com/Izder456/exfetch/actions/workflows/ci-openbsd.yml">
+<img src="https://github.com/Izder456/exfetch/actions/workflows/ci-openbsd.yml/badge.svg" alt="OpenBSD CI">
+</a>
 </div>
 <br>
 <div>

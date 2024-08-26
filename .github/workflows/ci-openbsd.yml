@@ -1,0 +1,26 @@
+name: OpenBSD CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  openbsd:
+    runs-on: ubuntu-latest
+    name: OpenBSD CI
+
+    steps:
+    - uses: actions/checkout@v4
+    - name: Run build
+      uses: vmactions/openbsd-vm@v1.0.8
+      with:
+        usesh: true
+        sync: sshfs
+        prepare: |
+          pkg_add elixir
+        run: |
+          PATH=$PATH:/usr/local/lib/erlang25/bin mix compile
+          PATH=$PATH:/usr/local/lib/erlang25/bin mix escript.build
+          PATH=$PATH:/usr/local/lib/erlang25/bin ./exfetch -h
