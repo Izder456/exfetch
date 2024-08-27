@@ -77,6 +77,7 @@ Usage: exfetch [options]
 -l, --lowercase         Use lowercase labels
 -n, --nerd-icons        Use nerd-icons for labels
 -s, --separator STRING  Separator [default = " -> "]
+                        (can be blank, does not account for spacing)
 -c, --color COLOR       Pick a color output [default = 4]
                         (0 1 2 3 4 5 6 7)
 -a, --ascii ASCII       Choose ASCII art [default = Tear]

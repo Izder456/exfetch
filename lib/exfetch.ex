@@ -194,6 +194,7 @@ defmodule Exfetch.OptionHandler do
     -l, --lowercase         Use lowercase labels
     -n, --nerd-icons        Use nerd-icons for labels
     -s, --separator STRING  Separator [default = " -> "]
+                            (can be blank, does not account for spacing)
     -c, --color COLOR       Pick a color output [default = 4]
                             (#{colors})
     -a, --ascii ASCII       Choose ASCII art [default = Tear]
