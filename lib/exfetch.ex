@@ -312,10 +312,18 @@ defmodule Exfetch.CLI do
       "dewm" => &Resource.get_session/0
     }
 
-    # Concurrently fetch results
-    results = 
+    ##
+    # Concurrency
+    ##
+    
+    # Step 1: Spawn all tasks
+    tasks = 
       resources
       |> Enum.map(fn {key, func} -> Task.async(fn -> {key, func.()} end) end)
+
+    # Step 2: Await all tasks
+    results = 
+      tasks
       |> Enum.map(&Task.await/1)
       |> Enum.into(%{})
 
