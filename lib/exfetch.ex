@@ -69,6 +69,10 @@ defmodule Exfetch.Resource do
        end
   end
 
+  def get_terminal do
+    System.get_env("TERM") || "Unknown"
+  end
+  
   def get_session do
     System.get_env("XDG_CURRENT_DESKTOP") ||
       System.get_env("DESKTOP_SESSION") ||
@@ -285,13 +289,14 @@ defmodule Exfetch.CLI do
     resources = %{
       "user" => &Resource.get_user/0,
       "host" => &Resource.get_host/0,
-      "shell" => &Resource.get_shell/0,
       "os" => &Resource.get_platform/0,
       "release" => &Resource.get_release/0,
+      "shell" => &Resource.get_shell/0,
+      "dewm" => &Resource.get_session/0,
+      "terminal" => &Resource.get_terminal/0,
       "cpu" => &Resource.get_cpu/0,
       "mem_usage" => &Resource.get_memory_usage/0,
       "mem" => &Resource.get_memory/0,
-      "dewm" => &Resource.get_session/0
     }
 
     ##
@@ -309,7 +314,7 @@ defmodule Exfetch.CLI do
       |> Enum.map(&Task.await/1)
       |> Enum.into(%{})
 
-    labels = if options.lowercase, do: ~w(user os ver shell de/wm cpu mem), else: ~w(USER OS VER SHELL DE/WM CPU MEM)
+    labels = if options.lowercase, do: ~w(user os ver shell de/wm term cpu mem), else: ~w(USER OS VER SHELL DE/WM TERM CPU MEM)
     chosen_ascii = @ascii_art[options.ascii]
     max_label_width = Enum.map(labels, &String.length/1) |> Enum.max()
 
@@ -338,8 +343,9 @@ defmodule Exfetch.CLI do
       3 -> format_line(labels, 2, max_width, options, results["release"])
       4 -> format_line(labels, 3, max_width, options, results["shell"])
       5 -> format_line(labels, 4, max_width, options, results["dewm"])
-      6 -> format_line(labels, 5, max_width, options, results["cpu"])
-      7 -> format_line(labels, 6, max_width, options, "#{results["mem_usage"]} MiB / #{results["mem"]} MiB")
+      6 -> format_line(labels, 5, max_width, options, results["terminal"])
+      7 -> format_line(labels, 6, max_width, options, results["cpu"])
+      8 -> format_line(labels, 7, max_width, options, "#{results["mem_usage"]} MiB / #{results["mem"]} MiB")
       _ -> ""
     end
   end
