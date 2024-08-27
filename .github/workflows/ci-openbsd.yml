@@ -13,14 +13,26 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
-    - name: Run build
+
+    - name: Set up OpenBSD environment
       uses: vmactions/openbsd-vm@v1.0.8
       with:
         usesh: true
         sync: sshfs
         prepare: |
           pkg_add elixir
-        run: |
-          PATH=$PATH:/usr/local/lib/erlang25/bin mix compile
-          PATH=$PATH:/usr/local/lib/erlang25/bin mix escript.build
-          PATH=$PATH:/usr/local/lib/erlang25/bin ./exfetch -h
+
+    - name: Set up PATH
+      run: echo 'export PATH=$PATH:/usr/local/lib/erlang25/bin' >> $GITHUB_ENV
+
+    - name: Get deps
+      run: mix deps.get
+      
+    - name: Compile
+      run: mix compile
+
+    - name: Build escript
+      run: mix escript.build
+
+    - name: Run exfetch
+      run: ./exfetch -h

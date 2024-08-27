@@ -1,4 +1,4 @@
-name: FreeBSD CI
+name: Linux CI
 
 on:
   push:
@@ -7,20 +7,18 @@ on:
     branches: [ "main" ]
 
 jobs:
-  freebsd:
+  linux:
     runs-on: ubuntu-latest
-    name: FreeBSD CI
+    name: Linux CI
 
     steps:
     - uses: actions/checkout@v4
 
-    - name: Set up FreeBSD environment
-      uses: vmactions/freebsd-vm@v1.0.8
+    - name: Set up Elixir
+      uses: erlef/setup-beam@v1
       with:
-        usesh: true
-        sync: sshfs
-        prepare: |
-          pkg install -y elixir erlang
+        elixir-version: '1.17.2'
+        otp-version: '26.2'
 
     - name: Get deps
       run: mix deps.get

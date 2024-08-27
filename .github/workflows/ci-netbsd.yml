@@ -1,4 +1,4 @@
-name: FreeBSD CI
+name: NetBSD CI
 
 on:
   push:
@@ -7,24 +7,28 @@ on:
     branches: [ "main" ]
 
 jobs:
-  freebsd:
+  netbsd:
     runs-on: ubuntu-latest
-    name: FreeBSD CI
+    name: NetBSD CI
 
     steps:
     - uses: actions/checkout@v4
 
-    - name: Set up FreeBSD environment
-      uses: vmactions/freebsd-vm@v1.0.8
+    - name: Set up NetBSD environment
+      uses: vmactions/netbsd-vm@v1
       with:
         usesh: true
         sync: sshfs
         prepare: |
-          pkg install -y elixir erlang
+          pkgin update
+          pkgin -y install elixir
+
+    - name: Set up PATH
+      run: echo 'export PATH=$PATH:/usr/pkg/lib/erlang/bin' >> $GITHUB_ENV
 
     - name: Get deps
-      run: mix deps.get
-
+      run: mix compile
+      
     - name: Compile
       run: mix compile
 
