@@ -149,18 +149,19 @@ defmodule Exfetch.Resource do
 end
 
 defmodule Exfetch.OptionHandler do
-  defstruct lowercase: false, color: 4, ascii: "Tear", separator: " -> "
+  defstruct lowercase: false, nerd_icons: false, color: 4, ascii: "Tear", separator: " -> "
 
   def parse(args) do
     {options, _, _} = OptionParser.parse(args,
       switches: [
         lowercase: :boolean,
+        nerd_icons: :boolean,
         separator: :string,
         color: :integer,
         ascii: :string,
-        help: :boolean
+        help: :boolean,
       ],
-      aliases: [l: :lowercase, s: :separator, c: :color, a: :ascii, h: :help]
+      aliases: [l: :lowercase, n: :nerd_icons, s: :separator, c: :color, a: :ascii, h: :help]
     )
 
     case options do
@@ -191,6 +192,7 @@ defmodule Exfetch.OptionHandler do
     Usage: exfetch [options]
 
     -l, --lowercase         Use lowercase labels
+    -n, --nerd-icons        Use nerd-icons for labels
     -s, --separator STRING  Separator [default = " -> "]
     -c, --color COLOR       Pick a color output [default = 4]
                             (#{colors})
@@ -283,6 +285,17 @@ defmodule Exfetch.CLI do
   @bold "\e[1m"
   @reset "\e[0m"
 
+  @nerd_icons %{
+    "user" => "",
+    "os" => "",
+    "ver" => "",
+    "shell" => "",
+    "de/wm" => "",
+    "term" => "",
+    "cpu" => "",
+    "mem" => "",
+  }
+  
   def main(args) do
     options = OptionHandler.parse(args)
 
@@ -314,7 +327,12 @@ defmodule Exfetch.CLI do
       |> Enum.map(&Task.await/1)
       |> Enum.into(%{})
 
-    labels = if options.lowercase, do: ~w(user os ver shell de/wm term cpu mem), else: ~w(USER OS VER SHELL DE/WM TERM CPU MEM)
+    labels = 
+      if options.nerd_icons do
+        Enum.map(~w(user os ver shell de/wm term cpu mem), &@nerd_icons[&1])
+      else
+        if options.lowercase, do: ~w(user os ver shell de/wm term cpu mem), else: ~w(USER OS VER SHELL DE/WM TERM CPU MEM)
+      end
     chosen_ascii = @ascii_art[options.ascii]
     max_label_width = Enum.map(labels, &String.length/1) |> Enum.max()
 
@@ -351,8 +369,9 @@ defmodule Exfetch.CLI do
   end
 
   defp format_line(labels, index, max_width, options, value) do
-    label = Enum.at(labels, index)
-    "#{@bold}#{Enum.at(@colors, options.color)}#{String.pad_trailing(label, max_width)}#{@reset}#{options.separator}#{value}"
+    label = Enum.at(labels, index, "")  # Use an empty string as default
+    label_width = if options.nerd_icons, do: 2, else: max_width
+    "#{@bold}#{Enum.at(@colors, options.color)}#{String.pad_trailing(label, label_width)}#{@reset}#{options.separator}#{value}"
   end
 
   defp colorize(ascii_line, info_line, color) do
