@@ -20,13 +20,7 @@ jobs:
         usesh: true
         sync: sshfs
         prepare: |
-          # Bootstrap pkgin
-          ftp -o /tmp/pkg.tar.gz http://ftp.netbsd.org/pub/pkgsrc/packages/NetBSD/amd64/9.0/All/pkg_install-20191008.tgz
-          tar -xzf /tmp/pkg.tar.gz -C /
-          export PATH="/usr/pkg/sbin:/usr/pkg/bin:$PATH"
-          pkg_add http://ftp.netbsd.org/pub/pkgsrc/packages/NetBSD/amd64/9.0/All/pkgin-20.7.0.tgz
-          pkgin update
-          pkgin -y install elixir
+          /usr/sbin/pkg_add elixir
         run: |
           export PATH=$PATH:/usr/pkg/lib/erlang/bin
           mix deps.get
