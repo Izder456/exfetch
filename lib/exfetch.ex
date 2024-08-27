@@ -272,6 +272,7 @@ defmodule Exfetch.CLI do
       " \\____/     ",
     ],
     "GhostBSDGhost" => [
+      "             ",
       "   _______   ",
       "  /       \\  ",
       "  | () () |  ",
