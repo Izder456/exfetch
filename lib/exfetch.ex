@@ -209,9 +209,6 @@ defmodule Exfetch.CLI do
       "  /   \\  ",
       " |     | ",
       "  \\___/  ",
-      "         ",
-      "         ",
-      "         "
     ],
     "Linux" => [
       "     ___     ",
@@ -221,8 +218,6 @@ defmodule Exfetch.CLI do
       "  ( /  \\ {|  ",
       "  /\\ __)/,)  ",
       " (}\\____\\/   ",
-      "             ",
-      "             "
     ],
     "OpenBSD" => [
       "      _____      ",
@@ -232,8 +227,6 @@ defmodule Exfetch.CLI do
       " |_  <   }  3 }  ",
       " / \\`   . `  /   ",
       "    /-_____-\\    ",
-      "                 ",
-      "                 "
     ],
     "NetBSD" => [
       "                       ",
@@ -244,8 +237,6 @@ defmodule Exfetch.CLI do
       "     \\\\                ",
       "      \\\\               ",
       "       \\\\              ",
-      "                       ",
-      "                       "
     ],
     "FreeBSD" => [
       "                ",
@@ -255,8 +246,6 @@ defmodule Exfetch.CLI do
       " |           |  ",
       "  ;         ;   ",
       "   '-_____-'    ",
-      "                ",
-      "                "
     ],
     "FreeBSDTrident" => [
       "                ",
@@ -266,8 +255,6 @@ defmodule Exfetch.CLI do
       " |     |     |  ",
       "  ;    |    ;   ",
       "   '-_____-'    ",
-      "                ",
-      "                "
     ],
     "GhostBSD" => [
       "            ",
@@ -276,9 +263,6 @@ defmodule Exfetch.CLI do
       "  ( /_/ /   ",
       "  _\\_, /    ",
       " \\____/     ",
-      "            ",
-      "            ",
-      "            "
     ],
     "GhostBSDGhost" => [
       "   _______   ",
@@ -288,8 +272,6 @@ defmodule Exfetch.CLI do
       "  |   3   |  ",
       "  /       \\  ",
       "  ^^^^^^^^^  ",
-      "              ",
-      "              "
     ],
   }
 
