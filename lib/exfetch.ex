@@ -69,6 +69,13 @@ defmodule Exfetch.Resource do
        end
   end
 
+  def get_session do
+    System.get_env("XDG_CURRENT_DESKTOP") ||
+      System.get_env("DESKTOP_SESSION") ||
+      System.get_env("GDMSESSION") || 
+      "Unknown"
+  end
+  
   def get_memory do
     platform = get_platform()
     memory = cond do
@@ -203,6 +210,8 @@ defmodule Exfetch.CLI do
       " |     | ",
       "  \\___/  ",
       "         ",
+      "         ",
+      "         "
     ],
     "Linux" => [
       "     ___     ",
@@ -213,6 +222,7 @@ defmodule Exfetch.CLI do
       "  /\\ __)/,)  ",
       " (}\\____\\/   ",
       "             ",
+      "             "
     ],
     "OpenBSD" => [
       "      _____      ",
@@ -223,6 +233,7 @@ defmodule Exfetch.CLI do
       " / \\`   . `  /   ",
       "    /-_____-\\    ",
       "                 ",
+      "                 "
     ],
     "NetBSD" => [
       "                       ",
@@ -234,6 +245,7 @@ defmodule Exfetch.CLI do
       "      \\\\               ",
       "       \\\\              ",
       "                       ",
+      "                       "
     ],
     "FreeBSD" => [
       "                ",
@@ -244,6 +256,7 @@ defmodule Exfetch.CLI do
       "  ;         ;   ",
       "   '-_____-'    ",
       "                ",
+      "                "
     ],
     "FreeBSDTrident" => [
       "                ",
@@ -254,6 +267,7 @@ defmodule Exfetch.CLI do
       "  ;    |    ;   ",
       "   '-_____-'    ",
       "                ",
+      "                "
     ],
     "GhostBSD" => [
       "            ",
@@ -264,6 +278,7 @@ defmodule Exfetch.CLI do
       " \\____/     ",
       "            ",
       "            ",
+      "            "
     ],
     "GhostBSDGhost" => [
       "   _______   ",
@@ -274,6 +289,7 @@ defmodule Exfetch.CLI do
       "  /       \\  ",
       "  ^^^^^^^^^  ",
       "              ",
+      "              "
     ],
   }
 
@@ -292,7 +308,8 @@ defmodule Exfetch.CLI do
       "release" => &Resource.get_release/0,
       "cpu" => &Resource.get_cpu/0,
       "mem_usage" => &Resource.get_memory_usage/0,
-      "mem" => &Resource.get_memory/0
+      "mem" => &Resource.get_memory/0,
+      "dewm" => &Resource.get_session/0
     }
 
     # Concurrently fetch results
@@ -302,7 +319,7 @@ defmodule Exfetch.CLI do
       |> Enum.map(&Task.await/1)
       |> Enum.into(%{})
 
-    labels = if options.lowercase, do: ~w(user os shell ver cpu mem), else: ~w(USER OS SHELL VER CPU MEM)
+    labels = if options.lowercase, do: ~w(user os ver shell de/wm cpu mem), else: ~w(USER OS VER SHELL DE/WM CPU MEM)
     chosen_ascii = @ascii_art[options.ascii]
     max_label_width = Enum.map(labels, &String.length/1) |> Enum.max()
 
@@ -315,7 +332,7 @@ defmodule Exfetch.CLI do
   end
 
   defp generate_output(ascii, labels, results, max_width, options) do
-    max_lines = max(length(ascii), 6)
+    max_lines = max(length(ascii), 9)
 
     Enum.map(0..(max_lines - 1), fn index ->
       ascii_line = Enum.at(ascii, index, String.duplicate(" ", String.length(List.first(ascii))))
@@ -328,10 +345,11 @@ defmodule Exfetch.CLI do
     case index do
       1 -> format_line(labels, 0, max_width, options, "#{results["user"]}@#{results["host"]}")
       2 -> format_line(labels, 1, max_width, options, results["os"])
-      3 -> format_line(labels, 2, max_width, options, results["shell"])
-      4 -> format_line(labels, 3, max_width, options, results["release"])
-      5 -> format_line(labels, 4, max_width, options, results["cpu"])
-      6 -> format_line(labels, 5, max_width, options, "#{results["mem_usage"]} MiB / #{results["mem"]} MiB")
+      3 -> format_line(labels, 2, max_width, options, results["release"])
+      4 -> format_line(labels, 3, max_width, options, results["shell"])
+      5 -> format_line(labels, 4, max_width, options, results["dewm"])
+      6 -> format_line(labels, 5, max_width, options, results["cpu"])
+      7 -> format_line(labels, 6, max_width, options, "#{results["mem_usage"]} MiB / #{results["mem"]} MiB")
       _ -> ""
     end
   end
