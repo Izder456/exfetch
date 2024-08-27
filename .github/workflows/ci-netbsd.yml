@@ -22,18 +22,9 @@ jobs:
         prepare: |
           pkgin update
           pkgin -y install elixir
-
-    - name: Set up PATH
-      run: echo 'export PATH=$PATH:/usr/pkg/lib/erlang/bin' >> $GITHUB_ENV
-
-    - name: Get deps
-      run: mix compile
-      
-    - name: Compile
-      run: mix compile
-
-    - name: Build escript
-      run: mix escript.build
-
-    - name: Run exfetch
-      run: ./exfetch -h
+        run: |
+          export PATH=$PATH:/usr/pkg/lib/erlang/bin
+          mix deps.get
+          mix compile
+          mix escript.build
+          ./exfetch -h

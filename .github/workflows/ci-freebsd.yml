@@ -21,15 +21,8 @@ jobs:
         sync: sshfs
         prepare: |
           pkg install -y elixir erlang
-
-    - name: Get deps
-      run: mix deps.get
-
-    - name: Compile
-      run: mix compile
-
-    - name: Build escript
-      run: mix escript.build
-
-    - name: Run exfetch
-      run: ./exfetch -h
+        run: |
+          mix deps.get
+          mix compile
+          mix escript.build
+          ./exfetch -h

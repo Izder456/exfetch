@@ -21,18 +21,9 @@ jobs:
         sync: sshfs
         prepare: |
           pkg_add elixir
-
-    - name: Set up PATH
-      run: echo 'export PATH=$PATH:/usr/local/lib/erlang25/bin' >> $GITHUB_ENV
-
-    - name: Get deps
-      run: mix deps.get
-      
-    - name: Compile
-      run: mix compile
-
-    - name: Build escript
-      run: mix escript.build
-
-    - name: Run exfetch
-      run: ./exfetch -h
+        run: |
+          export PATH=$PATH:/usr/local/lib/erlang25/bin
+          mix deps.get
+          mix compile
+          mix escript.build
+          ./exfetch -h
