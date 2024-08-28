@@ -70,14 +70,14 @@ defmodule Exfetch.Resource do
   end
 
   def get_terminal do
-    System.get_env("TERM") || "Unknown"
+    System.get_env("TERM") || "Could not get $TERM"
   end
   
   def get_session do
     System.get_env("XDG_CURRENT_DESKTOP") ||
       System.get_env("DESKTOP_SESSION") ||
       System.get_env("GDMSESSION") || 
-      "Unknown"
+      "Could not get session name"
   end
   
   def get_memory do
@@ -102,8 +102,11 @@ defmodule Exfetch.Resource do
       String.match?(platform, ~r/Linux/) ->
         {mem, 0} = System.cmd("sh", ["-c", "free -b | awk '/Mem/ {print $3}'"])
         mem
-      String.match?(platform, ~r/BSD/) ->
-        {mem, 0} = System.cmd("sh", ["-c", "vmstat -s | awk '/pages active/ {printf \"%.2f\\n\", $1*4096}'"])
+      String.match?(platform, ~r/FreeBSD/) ->
+        {mem, 0} = System.cmd("sh", ["-c", "sysctl hw.pagesize vm.stats.vm.v_active_count | awk '/pagesize/ {pagesize=$2} /active_count/ {print $2 * pagesize}'"])
+        mem
+      String.match?(platform, ~r/(?i)Net|OpenBSD/) ->
+        {mem, 0} = System.cmd("sh", ["-c", "vmstat -s | awk '/pages active/ {print $1 * 4096}'"])
         mem
       true ->
         "0"
